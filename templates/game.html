@@ -1,0 +1,185 @@
+<!@Fiona Yonkman 2019>
+<!Game file that handles the view for the game page using html/CSS & JavaScript>
+<html>
+  <head>
+    <title>Fiona's Hangman</title>
+  </head>
+  <body>
+    <div style="background-color:lightblue">
+      <h1> <center> <font size= 20> Hangman </font> </center> </h1>
+    </div>
+    <div>
+      <center>
+        <canvas id="Board" width="700" height="400"></canvas>
+        <script>
+          //create game canvas
+          var canvas = document.getElementById('Board');
+
+          {
+            var context = canvas.getContext('2d');
+            context.fillStyle = "lightpink";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            //function that takes start and end coordinates and
+            //draws straight line between them
+            function drawLine(startx, starty, endx, endy){
+              context.beginPath();
+              context.moveTo(startx,starty);
+              context.lineTo(endx,endy);
+              context.stroke();
+            }
+
+            //draw a number of lines equal to the number of letters in the word
+            n={{numL}}
+            for (var i = 0; i < n; i++){
+              drawLine(125+i*45, 350, 155+i*45, 350);
+            }
+
+            var inds = {{ind | tojson}}
+            var t = {{lett | tojson}}
+
+            //draw correctly-guessed letter above corresponding blank
+            if (inds.length > 0){
+              for (var i = 0; i < inds.length; i++){
+                context.fillStyle = "black";
+                context.font = "30px Arial";
+                context.fillText(t[i], 132+inds[i]*45, 340);
+              }
+            }
+
+            var wrong = {{gameState | tojson}}
+            //draw hangman platform
+            //bottom platform
+            if (wrong >= 1){drawLine(10, 300, 90, 300);}
+
+            //long vertical post
+            if (wrong >= 2){drawLine(50, 45, 50, 300);}
+
+            //top horizontal post
+            if (wrong >= 3){drawLine(50, 45, 180, 45);}
+
+            //short vertical post
+            if (wrong >= 4){drawLine(180, 45, 180, 80);}
+
+            //draw hangman body
+            //head
+            if (wrong >= 5){
+              context.beginPath();
+              context.arc(180, 95, 15, 0, Math.PI * 2);
+              context.stroke();
+            }
+
+            //torso
+            if (wrong >= 6){drawLine(180, 110, 180, 185);}
+
+            //left arm
+            if (wrong >= 7){drawLine(180, 120, 130, 140);}
+
+            //right arm
+            if (wrong >= 8){drawLine(180, 120, 230, 140);}
+
+            //left leg
+            if (wrong >= 9){drawLine(180, 185, 130, 225);}
+
+            //right leg
+
+            //if the user loses the game
+            if (wrong >= 10){
+              drawLine(180, 185, 230, 225);
+              context.fillStyle = "black";
+              context.font = "30px Arial";
+              context.fillText("You've Lost :(", 400, 200);
+              var w='{{word}}';
+              w = String(w)
+              //fill remaining empty blanks with the correct letters in red
+              for (var i = 0; i < w.length; i++){
+                if (!(inds.includes(i))) {
+                  context.fillStyle = "red";
+                  context.font = "30px Arial";
+                  context.fillText(w.charAt(i), 132+i*45, 340);
+                }
+              }
+            }
+
+            //if user wins the game
+            if (wrong == -1){
+              context.fillStyle = "black";
+              context.font = "30px Arial";
+              context.fillText("You've Won!!!", 400, 200);
+            }
+
+            var stats = {{ wl | tojson }}
+
+            //stats
+            context.fillStyle = "black";
+            context.font = "30px Arial";
+            context.fillText("W: " + stats[0] + " L: " + stats[1], 500, 100);
+
+
+          }
+        </script>
+      </center>
+    </div>
+    <div>
+      <center>
+        <form method="POST">
+          <textarea name="textbox"></textarea>
+          <button type="submit" name="submit" id = "btn" value="btn1">Try Letter</button>
+          <button type="submit" name="submit" id = "replay" style="display:none;" value="btn2">Play Again</button>
+          <button type="submit" name="submit" id = "btn" value="btn3">Main Menu</button>
+        </form>
+        <style type="text/css">
+            #btn {
+             background-color: #bbb;
+             padding: .5em;
+             -moz-border-radius: 5px;
+             -webkit-border-radius: 5px;
+             border-radius: 6px;
+             color: #fff;
+             font-family: 'Oswald';
+             font-size: 20px;
+             text-decoration: none;
+             border: none;
+            }
+
+            #btn:hover {
+             border: none;
+             background: orange;
+             box-shadow: 0px 0px 1px #777;
+            }
+
+            #replay {
+             background-color: #bbb;
+             padding: .5em;
+             -moz-border-radius: 5px;
+             -webkit-border-radius: 5px;
+             border-radius: 6px;
+             color: #fff;
+             font-family: 'Oswald';
+             font-size: 20px;
+             text-decoration: none;
+             border: none;
+            }
+
+            #replay:hover {
+             border: none;
+             background: orange;
+             box-shadow: 0px 0px 1px #777;
+            }
+        </style>
+        <script>
+          //if user wins or loses, show replay button
+          if({{gameState}} == -1 || {{gameState}} >= 10){
+            document.getElementById("btn").disabled = true;
+            document.getElementById("replay").style.display = "block";
+          }
+        </script>
+      </center>
+    </div>
+    <div>
+      <center>
+        <p> {{ text }} </p>
+      </center>
+    </div>
+  </body>
+</html>

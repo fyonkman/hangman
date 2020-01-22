@@ -1,0 +1,41 @@
+<!@Fiona Yonkman 2019>
+<!Index file handles the view for the initial hangman welcome page>
+<html>
+  <head>
+    <title>Fiona's Hangman</title>
+  </head>
+  <body>
+    <div style="background-color:lightblue">
+      <h1> <center> <font size= 20> Hangman </font> </center> </h1>
+    </div>
+    <div>
+      <center>
+        <form method="POST">
+          <button type="submit" name="submit" id = "btn" value="easy">Easy (3-4)</button>
+          <button type="submit" name="submit" id = "btn" value="medium">Medium (5-8)</button>
+          <button type="submit" name="submit" id = "btn" value="hard">Hard (9-12)</button>
+        </form>
+      </center>
+        <style type="text/css">
+            #btn {
+             background-color: #bbb;
+             padding: .5em;
+             -moz-border-radius: 5px;
+             -webkit-border-radius: 5px;
+             border-radius: 6px;
+             color: #fff;
+             font-family: 'Oswald';
+             font-size: 20px;
+             text-decoration: none;
+             border: none;
+            }
+
+            #btn:hover {
+             border: none;
+             background: orange;
+             box-shadow: 0px 0px 1px #777;
+            }
+        </style>
+    </div>
+  </body>
+</html>
